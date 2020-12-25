@@ -1,5 +1,3 @@
-### Copyright (C) 2017 NVIDIA Corporation. All rights reserved. 
-### Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 import numpy as np
 import torch
 import os
@@ -20,14 +18,14 @@ class Pix2PixHDModel(BaseModel):
             torch.backends.cudnn.benchmark = True
         self.isTrain = opt.isTrain
 
-        ##### define networks        
+        ##### define networks
         # Generator network
         netG_input_nc = opt.label_nc
         if not opt.no_instance:
-            netG_input_nc += 1          
-        self.netG = networks.define_G(netG_input_nc, opt.output_nc, opt.ngf, opt.netG, 
-                                      opt.n_downsample_global, opt.n_blocks_global, opt.n_local_enhancers, 
-                                      opt.n_blocks_local, opt.norm, gpu_ids=self.gpu_ids)        
+            netG_input_nc += 1
+        self.netG = networks.define_G(netG_input_nc, opt.output_nc, opt.ngf, opt.netG,
+                                      opt.n_downsample_global, opt.n_blocks_global, opt.n_local_enhancers,
+                                      opt.n_blocks_local, opt.norm, gpu_ids=self.gpu_ids)
 
         # Discriminator network
         if self.isTrain:
@@ -35,7 +33,7 @@ class Pix2PixHDModel(BaseModel):
             netD_input_nc = 4*opt.output_nc
             if not opt.no_instance:
                 netD_input_nc += 1
-            self.netD = networks.define_D(netD_input_nc, opt.ndf, opt.n_layers_D, opt.norm, use_sigmoid, 
+            self.netD = networks.define_D(netD_input_nc, opt.ndf, opt.n_layers_D, opt.norm, use_sigmoid,
                                           opt.num_D, not opt.no_ganFeat_loss, gpu_ids=self.gpu_ids)
 
         # Face discriminator network
@@ -44,28 +42,28 @@ class Pix2PixHDModel(BaseModel):
             netD_input_nc = 2*opt.output_nc
             if not opt.no_instance:
                 netD_input_nc += 1
-            self.netDface = networks.define_D(netD_input_nc, opt.ndf, opt.n_layers_D, opt.norm, use_sigmoid, 
+            self.netDface = networks.define_D(netD_input_nc, opt.ndf, opt.n_layers_D, opt.norm, use_sigmoid,
                                           1, not opt.no_ganFeat_loss, gpu_ids=self.gpu_ids, netD='face')
 
         #Face residual network
         if opt.face_generator:
             if opt.faceGtype == 'unet':
-                self.faceGen = networks.define_G(opt.output_nc*2, opt.output_nc, 32, 'unet', 
-                                          n_downsample_global=2, n_blocks_global=5, n_local_enhancers=0, 
+                self.faceGen = networks.define_G(opt.output_nc*2, opt.output_nc, 32, 'unet',
+                                          n_downsample_global=2, n_blocks_global=5, n_local_enhancers=0,
                                           n_blocks_local=0, norm=opt.norm, gpu_ids=self.gpu_ids)
             elif opt.faceGtype == 'global':
-                self.faceGen = networks.define_G(opt.output_nc*2, opt.output_nc, 64, 'global', 
-                                      n_downsample_global=3, n_blocks_global=5, n_local_enhancers=0, 
+                self.faceGen = networks.define_G(opt.output_nc*2, opt.output_nc, 64, 'global',
+                                      n_downsample_global=3, n_blocks_global=5, n_local_enhancers=0,
                                       n_blocks_local=0, norm=opt.norm, gpu_ids=self.gpu_ids)
             else:
                 raise('face generator not implemented!')
-            
+
         print('---------- Networks initialized -------------')
 
         # load networks
         if (not self.isTrain or opt.continue_train or opt.load_pretrain):
             pretrained_path = '' if not self.isTrain else opt.load_pretrain
-            self.load_network(self.netG, 'G', opt.which_epoch, pretrained_path)            
+            self.load_network(self.netG, 'G', opt.which_epoch, pretrained_path)
             if self.isTrain:
                 self.load_network(self.netD, 'D', opt.which_epoch, pretrained_path)
                 if opt.face_discrim:
@@ -81,13 +79,13 @@ class Pix2PixHDModel(BaseModel):
             self.old_lr = opt.lr
 
             # define loss functions
-            self.criterionGAN = networks.GANLoss(use_lsgan=not opt.no_lsgan, tensor=self.Tensor)   
+            self.criterionGAN = networks.GANLoss(use_lsgan=not opt.no_lsgan, tensor=self.Tensor)
             self.criterionFeat = torch.nn.L1Loss()
-            if not opt.no_vgg_loss:             
+            if not opt.no_vgg_loss:
                 self.criterionVGG = networks.VGGLoss(self.gpu_ids)
             if opt.use_l1:
                 self.criterionL1 = torch.nn.L1Loss()
-        
+
             # Loss names
             self.loss_names = ['G_GAN', 'G_GAN_Feat', 'G_VGG', 'D_real', 'D_fake', 'G_GANface', 'D_realface', 'D_fakeface']
 
@@ -97,11 +95,11 @@ class Pix2PixHDModel(BaseModel):
                 print('------------- Only training the local enhancer network (for %d epochs) ------------' % opt.niter_fix_global)
                 params_dict = dict(self.netG.named_parameters())
                 params = []
-                for key, value in params_dict.items():       
+                for key, value in params_dict.items():
                     if key.startswith('model' + str(opt.n_local_enhancers)):
                         params += [{'params':[value],'lr':opt.lr}]
                     else:
-                        params += [{'params':[value],'lr':0.0}]                            
+                        params += [{'params':[value],'lr':0.0}]
             else:
                 params = list(self.netG.parameters())
 
@@ -111,17 +109,17 @@ class Pix2PixHDModel(BaseModel):
                 if opt.niter_fix_main == 0:
                     params += list(self.netG.parameters())
 
-            self.optimizer_G = torch.optim.Adam(params, lr=opt.lr, betas=(opt.beta1, 0.999))                            
+            self.optimizer_G = torch.optim.Adam(params, lr=opt.lr, betas=(opt.beta1, 0.999))
 
             # optimizer D
             if opt.niter_fix_main > 0:
                 print('------------- Only training the face discriminator network (for %d epochs) ------------' % opt.niter_fix_main)
-                params = list(self.netDface.parameters())                         
+                params = list(self.netDface.parameters())
             else:
                 if opt.face_discrim:
-                    params = list(self.netD.parameters()) + list(self.netDface.parameters())   
+                    params = list(self.netD.parameters()) + list(self.netDface.parameters())
                 else:
-                    params = list(self.netD.parameters())                  
+                    params = list(self.netD.parameters())
 
             self.optimizer_D = torch.optim.Adam(params, lr=opt.lr, betas=(opt.beta1, 0.999))
 
@@ -152,7 +150,7 @@ class Pix2PixHDModel(BaseModel):
 
     def discriminate(self, input_label, test_image, use_pool=False):
         input_concat = torch.cat((input_label, test_image.detach()), dim=1)
-        if use_pool:            
+        if use_pool:
             fake_query = self.fake_pool.query(input_concat)
             return self.netD.forward(fake_query)
         else:
@@ -160,7 +158,7 @@ class Pix2PixHDModel(BaseModel):
 
     def discriminate_4(self, s0, s1, i0, i1, use_pool=False):
         input_concat = torch.cat((s0, s1, i0.detach(), i1.detach()), dim=1)
-        if use_pool:            
+        if use_pool:
             fake_query = self.fake_pool.query(input_concat)
             return self.netD.forward(fake_query)
         else:
@@ -168,7 +166,7 @@ class Pix2PixHDModel(BaseModel):
 
     def discriminateface(self, input_label, test_image, use_pool=False):
         input_concat = torch.cat((input_label, test_image.detach()), dim=1)
-        if use_pool:            
+        if use_pool:
             fake_query = self.fake_pool.query(input_concat)
             return self.netDface.forward(fake_query)
         else:
@@ -187,7 +185,7 @@ class Pix2PixHDModel(BaseModel):
         initial_I_0 = 0
 
         # Fake Generation I_0
-        input_concat = torch.cat((input_label, zeroshere), dim=1) 
+        input_concat = torch.cat((input_label, zeroshere), dim=1)
 
         #face residual for I_0
         face_residual_0 = 0
@@ -228,23 +226,23 @@ class Pix2PixHDModel(BaseModel):
             pred_fake_pool_face = self.discriminateface(face_label_0, fake_face_0, use_pool=True)
             loss_D_fake_face += 0.5 * self.criterionGAN(pred_fake_pool_face, False)
 
-            # Face Real Detection and Loss        
+            # Face Real Detection and Loss
             pred_real_face = self.discriminateface(face_label_0, real_face_0)
             loss_D_real_face += 0.5 * self.criterionGAN(pred_real_face, True)
 
-            # Face GAN loss (Fake Passability Loss)        
-            pred_fake_face = self.netDface.forward(torch.cat((face_label_0, fake_face_0), dim=1))        
+            # Face GAN loss (Fake Passability Loss)
+            pred_fake_face = self.netDface.forward(torch.cat((face_label_0, fake_face_0), dim=1))
             loss_G_GAN_face += 0.5 * self.criterionGAN(pred_fake_face, True)
 
             pred_fake_pool_face = self.discriminateface(face_label_1, fake_face_1, use_pool=True)
             loss_D_fake_face += 0.5 * self.criterionGAN(pred_fake_pool_face, False)
 
-            # Face Real Detection and Loss        
+            # Face Real Detection and Loss
             pred_real_face = self.discriminateface(face_label_1, real_face_1)
             loss_D_real_face += 0.5 * self.criterionGAN(pred_real_face, True)
 
-            # Face GAN loss (Fake Passability Loss)        
-            pred_fake_face = self.netDface.forward(torch.cat((face_label_1, fake_face_1), dim=1))        
+            # Face GAN loss (Fake Passability Loss)
+            pred_fake_face = self.netDface.forward(torch.cat((face_label_1, fake_face_1), dim=1))
             loss_G_GAN_face += 0.5 * self.criterionGAN(pred_fake_face, True)
 
             fake_face = torch.cat((fake_face_0, fake_face_1), dim=3)
@@ -255,16 +253,16 @@ class Pix2PixHDModel(BaseModel):
 
         # Fake Detection and Loss
         pred_fake_pool = self.discriminate_4(input_label, next_label, I_0, I_1, use_pool=True)
-        loss_D_fake = self.criterionGAN(pred_fake_pool, False)        
+        loss_D_fake = self.criterionGAN(pred_fake_pool, False)
 
-        # Real Detection and Loss        
+        # Real Detection and Loss
         pred_real = self.discriminate_4(input_label, next_label, real_image, next_image)
         loss_D_real = self.criterionGAN(pred_real, True)
 
-        # GAN loss (Fake Passability Loss)        
-        pred_fake = self.netD.forward(torch.cat((input_label, next_label, I_0, I_1), dim=1))        
+        # GAN loss (Fake Passability Loss)
+        pred_fake = self.netD.forward(torch.cat((input_label, next_label, I_0, I_1), dim=1))
         loss_G_GAN = self.criterionGAN(pred_fake, True)
-        
+
         # GAN feature matching loss
         loss_G_GAN_Feat = 0
         if not self.opt.no_ganFeat_loss:
@@ -274,13 +272,13 @@ class Pix2PixHDModel(BaseModel):
                 for j in range(len(pred_fake[i])-1):
                     loss_G_GAN_Feat += D_weights * feat_weights * \
                         self.criterionFeat(pred_fake[i][j], pred_real[i][j].detach()) * self.opt.lambda_feat
-                   
+
         # VGG feature matching loss
         loss_G_VGG = 0
         if not self.opt.no_vgg_loss:
             loss_G_VGG0 = self.criterionVGG(I_0, real_image) * self.opt.lambda_feat
             loss_G_VGG1 = self.criterionVGG(I_1, next_image) * self.opt.lambda_feat
-            loss_G_VGG = loss_G_VGG0 + loss_G_VGG1 
+            loss_G_VGG = loss_G_VGG0 + loss_G_VGG1
             if self.opt.netG == 'global': #need 2x VGG for artifacts when training local
                 loss_G_VGG *= 0.5
             if self.opt.face_discrim:
@@ -289,7 +287,7 @@ class Pix2PixHDModel(BaseModel):
 
         if self.opt.use_l1:
             loss_G_VGG += (self.criterionL1(I_1, next_image)) * self.opt.lambda_A
-        
+
         # Only return the fake_B image if necessary to save BW
         return [ [ loss_G_GAN, loss_G_GAN_Feat, loss_G_VGG, loss_D_real, loss_D_fake, \
                     loss_G_GAN_face, loss_D_real_face,  loss_D_fake_face], \
@@ -297,7 +295,7 @@ class Pix2PixHDModel(BaseModel):
 
     def inference(self, label, prevouts, face_coords):
 
-        # Encode Inputs        
+        # Encode Inputs
         input_label, _, _, _, prevouts = self.encode_input(Variable(label), zeroshere=Variable(prevouts), infer=True)
 
         if self.opt.face_generator:
@@ -310,7 +308,7 @@ class Pix2PixHDModel(BaseModel):
         I_0 = 0
         # Fake Generation
 
-        input_concat = torch.cat((input_label, prevouts), dim=1) 
+        input_concat = torch.cat((input_label, prevouts), dim=1)
         initial_I_0 = self.netG.forward(input_concat)
 
         if self.opt.face_generator:
@@ -342,18 +340,18 @@ class Pix2PixHDModel(BaseModel):
         # after fixing the global generator for a number of iterations, also start finetuning it
         params = list(self.netG.parameters())
         if self.opt.face_generator:
-            params += list(self.faceGen.parameters())           
-        self.optimizer_G = torch.optim.Adam(params, lr=self.opt.lr, betas=(self.opt.beta1, 0.999)) 
+            params += list(self.faceGen.parameters())
+        self.optimizer_G = torch.optim.Adam(params, lr=self.opt.lr, betas=(self.opt.beta1, 0.999))
         print('------------ Now also finetuning global generator -----------')
 
     def update_fixed_params_netD(self):
-        params = list(self.netD.parameters()) + list(self.netDface.parameters())         
-        self.optimizer_D = torch.optim.Adam(params, lr=self.opt.lr, betas=(self.opt.beta1, 0.999)) 
+        params = list(self.netD.parameters()) + list(self.netDface.parameters())
+        self.optimizer_D = torch.optim.Adam(params, lr=self.opt.lr, betas=(self.opt.beta1, 0.999))
         print('------------ Now also finetuning multiscale discriminator -----------')
 
     def update_learning_rate(self):
         lrd = self.opt.lr / self.opt.niter_decay
-        lr = self.old_lr - lrd        
+        lr = self.old_lr - lrd
         for param_group in self.optimizer_D.param_groups:
             param_group['lr'] = lr
         for param_group in self.optimizer_G.param_groups:

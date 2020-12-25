@@ -1,4 +1,4 @@
-import cv2 as cv 
+import cv2 as cv
 import numpy as np
 import scipy
 import math
@@ -338,6 +338,7 @@ def renderpose(posepts, canvas):
 	import sys
 	sys.exit(1)
 
+
 def renderface(facepts, canvas, disp=False, threshold = 0.2, smalldot = 2):
 	if disp:
 		color = tuple([255, 255, 255])
@@ -386,7 +387,7 @@ def renderface(facepts, canvas, disp=False, threshold = 0.2, smalldot = 2):
 				else:
 					firstlimb_ind = step
 					secondlimb_ind = step + 1
-				
+
 				if (facepts[3*firstlimb_ind + 2] > 0) and (facepts[3*secondlimb_ind + 2] > 0):
 					cur_canvas = canvas.copy()
 					Y = [facepts[3*firstlimb_ind], facepts[3*secondlimb_ind]]
@@ -533,6 +534,19 @@ def aveface(posepts):
 	else:
 		return posepts[(3*lear):(3*lear)+2]
 
+# 손 중심찾기
+def avehand(posepts_l,posepts_r):
+
+  hand_center = 9
+  # finger1 = 4
+  # finger2 = 20
+
+  con0 = posepts_l[(3*hand_center)+2] > 0
+  con1 = posepts_r[(3*hand_center)+2] > 0
+
+  if con0 and con1:
+    return posepts_l[(3*hand_center):(3*hand_center)+2] , posepts_r[(3*hand_center):(3*hand_center)+2]
+
 def get_pose_stats(posepts):
 
 	nose = 0
@@ -567,7 +581,7 @@ def get_pose_stats(posepts):
 		print("pose length of %d format is not supported" % len(posepts))
 		import sys
 		sys.exit(1)
-		
+
 	min_tip_toe = 0
 	max_tip_toe = 0
 
