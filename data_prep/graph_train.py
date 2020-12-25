@@ -135,7 +135,8 @@ while n <= end:
       l_handpts = fix_scale_coords(l_handpts, scale, translate)
 
     canvas = renderpose(posepts, 255 * np.ones(myshape, dtype='uint8'))
-    canvas = renderface_sparse(facepts, canvas, numkeypoints, disp=False)
+    #canvas = renderface_sparse(facepts, canvas, numkeypoints, disp=False)
+    canvas = renderface(facepts, canvas, disp=False)
     canvas = renderhand(r_handpts, canvas)
     canvas = renderhand(l_handpts, canvas)
 
