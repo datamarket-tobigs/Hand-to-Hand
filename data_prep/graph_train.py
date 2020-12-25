@@ -1,4 +1,4 @@
-import cv2 as cv 
+import cv2 as cv
 import numpy as np
 import scipy
 import math
@@ -78,9 +78,14 @@ if not os.path.exists(savedir + '/train_img'):
 	os.makedirs(savedir + '/train_img')
 if not os.path.exists(savedir + '/train_facetexts128'):
 	os.makedirs(savedir + '/train_facetexts128')
+if not os.path.exists(savedir + '/train_handtexts90'):
+	os.makedirs(savedir + '/train_handtexts90')
 
 if opt.debug and (not os.path.exists(savedir + '/debug')):
 	os.makedirs(savedir + '/debug')
+if opt.debug and (not os.path.exists(savedir + '/debug_hand')):
+	os.makedirs(savedir + '/debug_hand')
+
 
 print('----------------- Loading Frames -----------------')
 frames = (os.listdir(frames_dir))
@@ -177,6 +182,55 @@ while n <= end:
         oriImg = oriImg[miny:maxy, minx:maxx, :]
         oriImg = Image.fromarray(oriImg)
         oriImg.save(savedir + '/debug/' + filebase_name + '.png')
+
+    """ save handtexts """
+    if get_factexts:
+
+      ave_l , ave_r = avehand(r_handpts, l_handpts)
+
+      avex_l = ave_l[0]
+      avey_l = ave_l[1]
+
+      avex_r = ave_r[0]
+      avey_r = ave_r[1]
+
+      minx_l = int((max(avex_l - boxbuffer, startx) - startx) * scalex)
+      miny_l = int((max(avey_l - boxbuffer, starty) - starty) * scaley)
+      maxx_l = int((min(avex_l + boxbuffer, endx) - startx) * scalex)
+      maxy_l = int((min(avey_l + boxbuffer, endy) - starty) * scaley)
+
+      minx_r = int((max(avex_r - boxbuffer, startx) - startx) * scalex)
+      miny_r = int((max(avey_r - boxbuffer, starty) - starty) * scaley)
+      maxx_r = int((min(avex_r + boxbuffer, endx) - startx) * scalex)
+      maxy_r = int((min(avey_r + boxbuffer, endy) - starty) * scaley)
+
+      miny_l, maxy_l, minx_l, maxx_l = makebox128(miny_l, maxy_l, minx_l, maxx_l,90,90)
+      miny_r, maxy_r, minx_r, maxx_r = makebox128(miny_r, maxy_r, minx_r, maxx_r,90,90)
+      # print miny, maxy, minx, maxx, filebase_name
+
+      myfile_l = savedir + "/train_handtexts90/" + filebase_name +'_l'+'.txt'
+      F = open(myfile_l, "w")
+      F.write(str(miny_l) + " " + str(maxy_l) + " " + str(minx_l) + " " + str(maxx_l))
+      F.close()
+
+      myfile_r = savedir + "/train_handtexts90/" + filebase_name +'_r' + '.txt'
+      F = open(myfile_r, "w")
+      F.write(str(miny_r) + " " + str(maxy_r) + " " + str(minx_r) + " " + str(maxx_r))
+      F.close()
+
+      # debug = True
+      if opt.debug:
+        oriImg = np.array(oriImg) #already 512x1024
+        oriImg = oriImg[miny_l:maxy_l, minx_l:maxx_l, :]
+        oriImg = Image.fromarray(oriImg)
+        oriImg.save(savedir + '/debug_hand/' + filebase_name +'_l'+ '.png')
+
+        # debug = True
+      if opt.debug:
+        oriImg = np.array(oriImg) #already 512x1024
+        oriImg = oriImg[miny_l:maxy_l, minx_l:maxx_l, :]
+        oriImg = Image.fromarray(oriImg)
+        oriImg.save(savedir + '/debug_hand/' + filebase_name +'_r'+ '.png')
 
     numframesmade += 1
   n += step
