@@ -78,8 +78,8 @@ if not os.path.exists(savedir + '/train_img'):
 	os.makedirs(savedir + '/train_img')
 if not os.path.exists(savedir + '/train_facetexts128'):
 	os.makedirs(savedir + '/train_facetexts128')
-if not os.path.exists(savedir + '/train_handtexts90'):
-	os.makedirs(savedir + '/train_handtexts90')
+if not os.path.exists(savedir + '/train_handtexts64'):
+	os.makedirs(savedir + '/train_handtexts64')
 
 if opt.debug and (not os.path.exists(savedir + '/debug')):
 	os.makedirs(savedir + '/debug')
@@ -88,7 +88,7 @@ if opt.debug and (not os.path.exists(savedir + '/debug_hand')):
 
 
 print('----------------- Loading Frames -----------------')
-frames = (os.listdir(frames_dir))
+frames = sorted(os.listdir(frames_dir))
 print(frames)
 print('----------------- All Loaded -----------------')
 
@@ -96,8 +96,9 @@ while n <= end:
   print(n)
   framesmadestr = '%03d' % numframesmade
   filebase_name = os.path.splitext(frames[n])[0]
-  string_num = '{0:03d}'.format(n)
-  key_name =  "/content/drive/MyDrive/Colab Notebooks/everybodyDanceNow/EverybodyDanceNow/my_data/json/NIA_SL_SEN0001_REAL06_F_000000000" + string_num
+  #string_num = '{0:03d}'.format(n)
+  json_list = sorted(os.listdir('/workspace/Image-team1/my_data/json'))
+  key_name =  "/workspace/Image-team1/my_data/json/" + json_list[n]
   frame_name = os.path.join(frames_dir, frames[n])
 
   posepts = []
@@ -108,7 +109,7 @@ while n <= end:
   r_handpts = readkeypointsfile(key_name + "_hand_right")
   l_handpts = readkeypointsfile(key_name + "_hand_left")
   if posepts is None: ## try json
-    posepts, facepts, r_handpts, l_handpts = readkeypointsfile(key_name + "_keypoints.json")
+    posepts, facepts, r_handpts, l_handpts = readkeypointsfile(key_name )
     if posepts is None:
       print('unable to read keypoints file')
       import sys
@@ -204,16 +205,16 @@ while n <= end:
       maxx_r = int((min(avex_r + boxbuffer, endx) - startx) * scalex)
       maxy_r = int((min(avey_r + boxbuffer, endy) - starty) * scaley)
 
-      miny_l, maxy_l, minx_l, maxx_l = makebox128(miny_l, maxy_l, minx_l, maxx_l,90,90)
-      miny_r, maxy_r, minx_r, maxx_r = makebox128(miny_r, maxy_r, minx_r, maxx_r,90,90)
+      miny_l, maxy_l, minx_l, maxx_l = makebox128(miny_l, maxy_l, minx_l, maxx_l,64,64)
+      miny_r, maxy_r, minx_r, maxx_r = makebox128(miny_r, maxy_r, minx_r, maxx_r,64,64)
       # print miny, maxy, minx, maxx, filebase_name
 
-      myfile_l = savedir + "/train_handtexts90/" + filebase_name +'_l'+'.txt'
+      myfile_l = savedir + "/train_handtexts64/" + filebase_name +'_l'+'.txt'
       F = open(myfile_l, "w")
       F.write(str(miny_l) + " " + str(maxy_l) + " " + str(minx_l) + " " + str(maxx_l))
       F.close()
 
-      myfile_r = savedir + "/train_handtexts90/" + filebase_name +'_r' + '.txt'
+      myfile_r = savedir + "/train_handtexts64/" + filebase_name +'_r' + '.txt'
       F = open(myfile_r, "w")
       F.write(str(miny_r) + " " + str(maxy_r) + " " + str(minx_r) + " " + str(maxx_r))
       F.close()
