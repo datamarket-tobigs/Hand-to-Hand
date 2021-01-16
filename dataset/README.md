@@ -31,3 +31,6 @@ data
 ### 데이터 확인하기
 아래와 같이 이미지와 이미지 위에 keypoint를 찍은 데이터 3개를 확인해 볼 수 있다.  
 ![image](https://user-images.githubusercontent.com/39791467/104814584-1f901c00-5853-11eb-897c-f2bef03e4818.png)
+
+## 데이터 출처
+[AI Hub 수어 영상](https://www.aihub.or.kr/aidata/7965)
