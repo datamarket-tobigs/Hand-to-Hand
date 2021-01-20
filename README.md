@@ -63,7 +63,7 @@ cd hand-to-hand/tacotron
 !python __main__.py
 ```
 
-## Refrence
+## Reference
 
 ------------------------------------------
 
