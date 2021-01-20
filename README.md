@@ -57,7 +57,7 @@ test_mode: "recent" / "best"
 
 * Start Train, Test
 
-```
+```python
 cd hand-to-hand/tacotron
 
 !python __main__.py
