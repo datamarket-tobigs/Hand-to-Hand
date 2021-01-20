@@ -21,7 +21,7 @@ pip install -r requirements.txt
 #### in Colab
 
 - We recommend using GPU in Colab. You can change the runtime type by :[Runtime]-[Change runtime type]-[GPU] 
-- `main.ipynb`: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/602-go/getPic/blob/master/getPic_chatbot/test.ipynb)
+- `main.ipynb`: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Tobigs-team/hand-to-hand/blob/text2keypoint/text2keypoint/main.ipynb)
 
 #### in Web
 
