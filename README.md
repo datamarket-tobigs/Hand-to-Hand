@@ -8,7 +8,7 @@ The goal of text2keypoint is to **translate text(gloss) to continuous sequence o
 <br/>
 <br/>
 
-<span style="color:grey">_Generated Keypoints of Gloss "어지럽다. 쓰러지다"(dizzy. faint)_</span>
+<span style="color:grey">_Generated Keypoints of Gloss "어지럽다. 쓰러지다." (dizzy. faint)_</span>
 ![image](https://user-images.githubusercontent.com/68496320/105183542-a9045e80-5b71-11eb-8f72-af6b77e0453c.png)
 
 
