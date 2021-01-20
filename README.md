@@ -5,9 +5,11 @@
 ![image](https://user-images.githubusercontent.com/68496320/105183985-292ac400-5b72-11eb-93ec-4601ddcd9132.png)
 
 The goal of text2keypoint is to **translate text(gloss) to continuous sequence of 2D sign pose keypoints**. We use **<u>Tacotron</u>** of Google as a base model and add masking layer and counter value to stabilize training process and better predict the length of sequence. Evaluation metric is DTW(Dynamic Time Warping) score. The source for modifying model was from [Progressive Transformers SLP (Ben Saunders)](https://github.com/BenSaunders27/ProgressiveTransformersSLP). 
+<br/>
 
-![image](https://user-images.githubusercontent.com/68496320/105183542-a9045e80-5b71-11eb-8f72-af6b77e0453c.png)
 <span style="color:grey">_generated keypoint of gloss "어지럽다. 쓰러지다"(dizzy. faint)_</span>
+![image](https://user-images.githubusercontent.com/68496320/105183542-a9045e80-5b71-11eb-8f72-af6b77e0453c.png)
+
 
  
  
