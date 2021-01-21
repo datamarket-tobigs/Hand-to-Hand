@@ -85,8 +85,8 @@ if not os.path.exists(savedir + '/'+phase+'_img'):
 	os.makedirs(savedir + '/'+phase+'_img')
 if not os.path.exists(savedir + '/'+phase+'_facetexts128') and get_facetexts:
 	os.makedirs(savedir + '/'+phase+'_facetexts128')
-if not os.path.exists(savedir + '/'+phase+'_handtexts90') and get_facetexts:
-	os.makedirs(savedir + '/'+phase+'_handtexts90')
+if not os.path.exists(savedir + '/'+phase+'_handtexts64') and get_facetexts:
+	os.makedirs(savedir + '/'+phase+'_handtexts64')
 
 if not os.path.exists(savedir + '/debug'):
 	os.makedirs(savedir + '/debug')
@@ -94,7 +94,7 @@ if not os.path.exists(savedir + '/debug_hand'):
 	os.makedirs(savedir + '/debug_hand')
 
 print('----------------- Loading Frames -----------------')
-frames = os.listdir(frames_dir)
+frames = sorted(os.listdir(frames_dir))
 print('----------------- All Loaded -----------------')
 
 pose_window = []
@@ -108,9 +108,10 @@ n = start
 while n <= end:
   print(n)
   framesmadestr = '%03d' % numframesmade
-  string_num = '{0:03d}'.format(n)
+  #string_num = '{0:03d}'.format(n)
   filebase_name = os.path.splitext(frames[n])[0]
-  key_name = "/content/drive/MyDrive/Colab Notebooks/everybodyDanceNow/EverybodyDanceNow/my_data/json/NIA_SL_SEN0001_REAL06_F_000000000" + string_num
+  json_list = sorted(os.listdir('/workspace/Image-team1/my_data/json'))
+  key_name = "/workspace/Image-team1/my_data/json/" + json_list[n]
   frame_name = os.path.join(frames_dir, frames[n])
 
   posepts = []
@@ -121,7 +122,7 @@ while n <= end:
   r_handpts = readkeypointsfile(key_name + "_hand_right")
   l_handpts = readkeypointsfile(key_name + "_hand_left")
   if posepts is None: ## try json
-    posepts, facepts, r_handpts, l_handpts = readkeypointsfile(key_name +"_keypoints.json")
+    posepts, facepts, r_handpts, l_handpts = readkeypointsfile(key_name)
     if posepts is None:
       print('unable to read keypoints file')
       import sys
@@ -245,54 +246,54 @@ while n <= end:
         oriImg = Image.fromarray(oriImg)
         oriImg.save(savedir + '/debug/' + filebase_name + '.png')
 
-    """ save handtexts """
-    if get_facetexts:
+#     """ save handtexts """
+#     if get_facetexts:
 
-      ave_l , ave_r = avehand(ave_rhand, ave_lhand)
+#       ave_l , ave_r = avehand(ave_rhand, ave_lhand)
 
-      avex_l = ave_l[0]
-      avey_l = ave_l[1]
+#       avex_l = ave_l[0]
+#       avey_l = ave_l[1]
 
-      avex_r = ave_r[0]
-      avey_r = ave_r[1]
+#       avex_r = ave_r[0]
+#       avey_r = ave_r[1]
 
-      minx_l = int((max(avex_l - boxbuffer, startx) - startx) * scalex)
-      miny_l = int((max(avey_l - boxbuffer, starty) - starty) * scaley)
-      maxx_l = int((min(avex_l + boxbuffer, endx) - startx) * scalex)
-      maxy_l = int((min(avey_l + boxbuffer, endy) - starty) * scaley)
+#       minx_l = int((max(avex_l - boxbuffer, startx) - startx) * scalex)
+#       miny_l = int((max(avey_l - boxbuffer, starty) - starty) * scaley)
+#       maxx_l = int((min(avex_l + boxbuffer, endx) - startx) * scalex)
+#       maxy_l = int((min(avey_l + boxbuffer, endy) - starty) * scaley)
 
-      minx_r = int((max(avex_r - boxbuffer, startx) - startx) * scalex)
-      miny_r = int((max(avey_r - boxbuffer, starty) - starty) * scaley)
-      maxx_r = int((min(avex_r + boxbuffer, endx) - startx) * scalex)
-      maxy_r = int((min(avey_r + boxbuffer, endy) - starty) * scaley)
+#       minx_r = int((max(avex_r - boxbuffer, startx) - startx) * scalex)
+#       miny_r = int((max(avey_r - boxbuffer, starty) - starty) * scaley)
+#       maxx_r = int((min(avex_r + boxbuffer, endx) - startx) * scalex)
+#       maxy_r = int((min(avey_r + boxbuffer, endy) - starty) * scaley)
 
-      miny_l, maxy_l, minx_l, maxx_l = makebox128(miny_l, maxy_l, minx_l, maxx_l,90,90)
-      miny_r, maxy_r, minx_r, maxx_r = makebox128(miny_r, maxy_r, minx_r, maxx_r,90,90)
-      # print miny, maxy, minx, maxx, filebase_name
+#       miny_l, maxy_l, minx_l, maxx_l = makebox128(miny_l, maxy_l, minx_l, maxx_l,64,64)
+#       miny_r, maxy_r, minx_r, maxx_r = makebox128(miny_r, maxy_r, minx_r, maxx_r,64,64)
+#       # print miny, maxy, minx, maxx, filebase_name
 
-      myfile_l = savedir + "/" + phase + "_handtexts90/" + framesmadestr +'_l'+'.txt'
-      F = open(myfile_l, "w")
-      F.write(str(miny_l) + " " + str(maxy_l) + " " + str(minx_l) + " " + str(maxx_l))
-      F.close()
+#       myfile_l = savedir + "/" + phase + "_handtexts64/" + framesmadestr +'_l'+'.txt'
+#       F = open(myfile_l, "w")
+#       F.write(str(miny_l) + " " + str(maxy_l) + " " + str(minx_l) + " " + str(maxx_l))
+#       F.close()
 
-      myfile_r = savedir + "/"+ phase + "_handtexts90/" + framesmadestr +'_r' + '.txt'
-      F = open(myfile_r, "w")
-      F.write(str(miny_r) + " " + str(maxy_r) + " " + str(minx_r) + " " + str(maxx_r))
-      F.close()
+#       myfile_r = savedir + "/"+ phase + "_handtexts64/" + framesmadestr +'_r' + '.txt'
+#       F = open(myfile_r, "w")
+#       F.write(str(miny_r) + " " + str(maxy_r) + " " + str(minx_r) + " " + str(maxx_r))
+#       F.close()
 
-      debug = True
-      if debug:
-        oriImg = np.array(saveoriImg) #already 512x1024
-        oriImg = oriImg[miny_l:maxy_l, minx_l:maxx_l, :]
-        oriImg = Image.fromarray(oriImg)
-        oriImg.save(savedir + '/debug_hand/' + filebase_name +'_l'+ '.png')
+#       debug = True
+#       if debug:
+#         oriImg = np.array(saveoriImg) #already 512x1024
+#         oriImg = oriImg[miny_l:maxy_l, minx_l:maxx_l, :]
+#         oriImg = Image.fromarray(oriImg)
+#         oriImg.save(savedir + '/debug_hand/' + filebase_name +'_l'+ '.png')
 
-      debug = True
-      if debug:
-        oriImg = np.array(saveoriImg) #already 512x1024
-        oriImg = oriImg[miny_r:maxy_r, minx_r:maxx_r, :]
-        oriImg = Image.fromarray(oriImg)
-        oriImg.save(savedir + '/debug_hand/' + filebase_name +'_r'+ '.png')
+#       debug = True
+#       if debug:
+#         oriImg = np.array(saveoriImg) #already 512x1024
+#         oriImg = oriImg[miny_r:maxy_r, minx_r:maxx_r, :]
+#         oriImg = Image.fromarray(oriImg)
+#         oriImg.save(savedir + '/debug_hand/' + filebase_name +'_r'+ '.png')
 
 
     pose_window = []
