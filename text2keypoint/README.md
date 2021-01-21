@@ -31,7 +31,7 @@ pip install -r requirements.txt
 #### in Colab
 
 - We recommend using GPU in Colab. You can change the runtime type by :[Runtime]-[Change runtime type]-[GPU] 
-- `main.ipynb`: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Tobigs-team/hand-to-hand/blob/text2keypoint/text2keypoint/main.ipynb)
+- `main.ipynb`: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Tobigs-team/hand-to-hand/blob/master/text2keypoint/main.ipynb)
 
 #### in Web
 
@@ -46,7 +46,7 @@ conda activate virtual_env_name
 
 ```
 $git clone https://github.com/Tobigs-team/hand-to-hand.git
-cd hand-to-hand/tacotron
+cd hand-to-hand/text2keypoint
 $git install -r requirements.txt
 ```
 
@@ -61,7 +61,7 @@ $git install -r requirements.txt
 # default mode is "Train"
 mode: "Train" / "Test"
 
-# Set test_mode("recent" or "best") before inference
+# Set test_mode before running test
 test_mode: "recent" / "best"
 ```
 
