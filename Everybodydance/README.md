@@ -1,6 +1,6 @@
 # Everybody dance now 🧏🏻‍♀️
 
-## 1. Getting Started
+## 0. Getting Started
 - tensorflow==2.4
 - cuda_11.0
 - scipy==1.2.0
@@ -8,7 +8,7 @@
 
 * * *
 
-## 2. Dataset
+## 1. Dataset
 - [수어 영상 데이터](https://www.aihub.or.kr/aidata/7965) 를 활용함.
 > <img src='https://user-images.githubusercontent.com/28949182/105356632-fc8cb000-5c36-11eb-89ba-d90fcaee96c2.png' width='70%'/> 
 
@@ -16,7 +16,7 @@
 > <img src='https://user-images.githubusercontent.com/28949182/105357856-c3553f80-5c38-11eb-8c2c-872700ceedf3.png' width='70%'/>
 * * *
 
-## 3. Dataset preparation
+## 2. Dataset preparation
 ### Train dataset
 ```
 # train dataset 만들기
@@ -38,9 +38,13 @@
 --spread 4000 4996 1 \
 --facetexts
 ```
-
 > 참고사항 <br/>
  json 파일에 "hand_left_keypoints_2d":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] 이런부분은 없어야 함.
+* * *
+
+## 3. Model
+<img src ='https://user-images.githubusercontent.com/28949182/105359514-e4b72b00-5c3a-11eb-8e43-eddc566c0ee3.png' width='70%'></img>
+<img src ='https://user-images.githubusercontent.com/28949182/105359586-f6003780-5c3a-11eb-89f6-19920f7ea665.png' width='70%'></img>
 * * *
 
 ## 4. Training
