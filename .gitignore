@@ -1,0 +1,6 @@
+.idea/
+data/
+.ipynb_checkpoints
+venv/
+.DS_Store
+*.log
