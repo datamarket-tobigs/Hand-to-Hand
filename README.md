@@ -1,6 +1,6 @@
 # Hand to Hand
 
-**Hand-to-Hand**는 청각장애인을 위한 수서생성 서비스 입니다.
+**Hand-to-Hand**는 청각장애인을 위한 수어생성 서비스 입니다.
 
 
 
