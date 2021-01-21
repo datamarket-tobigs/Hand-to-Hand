@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import json
 import os
-from helpers import make_dir
+from .helpers import make_dir
 
 
 def create_stick(filename, keypoints, save_path):

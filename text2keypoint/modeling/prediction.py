@@ -3,10 +3,9 @@ import cv2
 import json
 import os
 
-from model import build_model
-from key2video import create_img_video
-from dtw import calculate_dtw
-from helpers import make_dir
+from .key2video import create_img_video
+from .dtw import calculate_dtw
+from .helpers import make_dir
 
 
 def make_predict(cfg:dict, model, X_, y, decoder_input_array,

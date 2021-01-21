@@ -9,7 +9,6 @@ from tensorflow.keras.layers import (Conv1D, Dense, Activation, MaxPooling1D, Ad
                           Concatenate, Bidirectional, GRU, Dropout,
                           BatchNormalization, Lambda, Dot, Multiply)
 from tensorflow.keras.layers import Input, Embedding, concatenate, RepeatVector, Dense, Reshape
-from helpers import Max_length
 
 """
 Base architecture of Tacotron (Encoder, Decoder prenet, Attention, Decoder)

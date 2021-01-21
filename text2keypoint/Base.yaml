@@ -1,6 +1,6 @@
-mode: "Test"  # "Train" or "Test"
+mode: "Train"  # "Train" or "Test"
 
-data_path : "./data/"
+data_path : "./data/sample_data/"
 model_path: "./Models/"
 result_path: "./Models/result/"
 
@@ -12,9 +12,9 @@ data:
     trg: "skels"    # Target - 3D body co-ordinates (skels)
     files: "files"    # Filenames for each sequence
 
-    train: "./data/train"
-    dev: "./data/dev"
-    test: "./data/test"
+    train: "./data/sample_data/train"
+    dev: "./data/sample_data/dev"
+    test: "./data/sample_data/test"
 
     max_sent_length: 264 # Max Sentence Length
     skip_frames: 1   # Skip frames in the data, to reduce the data input size
@@ -23,14 +23,14 @@ training:
     batch_size: 2    # Batch Size for training (recommendation: 32)
     patience: 10  # How many epochs of no improvement causes a LR reduction (recommendation: 100)
     decrease_factor: 0.2  # LR reduction factor, after the # of patience epochs
-    min_LR: 0.00001 # minimum limit of LR 
+    min_LR: 0.00001 # Minimum limit of LR 
     epochs: 100  # How many epochs to run for (recommendation: over 5000)
 
 model:
-    latent_dim: 50 # dimension of latent vector
-    K1: 16
+    latent_dim: 50 # Dimension of latent vector
+    K1: 16 # Range of kernel size in conv1dbank
     K2: 8
-    N_MEL: 255
+    N_MEL: 255 # Num of Mel spectograms
     vocab_size_target: 255 # size of target skels
     MAX_MEL_TIME_LENGTH: 264 # max length of 
     r: 5

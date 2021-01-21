@@ -2,9 +2,9 @@ import tensorflow as tf
 import os
 import pickle
 
-from data import load_data
-from prediction import make_predict
-from helpers import make_dir
+from data.data import load_data
+from modeling.prediction import make_predict
+from modeling.helpers import make_dir
 
 def Test(cfg: dict) -> None:
     """

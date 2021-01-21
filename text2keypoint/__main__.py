@@ -1,4 +1,4 @@
-from helpers import load_config
+from modeling.helpers import load_config
 from train import Train
 from test import Test
 

@@ -6,11 +6,11 @@ import numpy as np
 import pickle
 import json
 
-from model import build_model
-from helpers import  load_config, make_dir, Max_length
-from prediction import make_predict
-from data import load_data
-from key2video import create_img_video
+from data.data import load_data
+from modeling.model import build_model
+from modeling.helpers import  load_config, make_dir
+from modeling.prediction import make_predict
+from modeling.key2video import create_img_video
 
 """
 Set callbacks and execute training process.
@@ -20,7 +20,8 @@ class MyCallback(tf.keras.callbacks.Callback):
     """
     Set the custom callback class
     to print learning rate every 5 epochs and save model and prediction every 10 epochs.
-    (Given periods are just for the example data(train, dev, test each are 5). Freely change values as you want.)
+    (Given periods are just for sample data(train, dev, test, each set has 5).
+    Freely change values as you want.)
 
     :method __init__: call required parameter
     :method on_epoch_end: execute at the end of each epoch

@@ -1,5 +1,5 @@
 from tensorflow.keras.models import Model
-from tacotron import *
+from .tacotron import *
 
 
 def build_model(cfg: dict, max_X, vocab_size_source):
