@@ -40,7 +40,7 @@ ______________________________________
  * [text2keypoint](https://github.com/Tobigs-team/Hand-to-Hand/blob/master/text2keypoint/README.md) 
 ### **keypoint2video**
  * [stylegan2_basic](https://github.com/Tobigs-team/Hand-to-Hand/blob/master/stylegan2_basic/README.md)
- * [Everybodaydance](https://github.com/Tobigs-team/Hand-to-Hand/blob/master/Everybodydance/README.md)
+ * [Everybodydance](https://github.com/Tobigs-team/Hand-to-Hand/blob/master/Everybodydance/README.md)
 
 ## Result
 
